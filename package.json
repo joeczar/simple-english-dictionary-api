@@ -5,8 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node startWork.js && node server.js"
+    "dev": "bun run --watch server.js",
+    "start": "bun run startWork.js && bun run server.js"
   },
   "keywords": [],
   "author": "",
