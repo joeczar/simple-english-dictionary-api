@@ -1,14 +1,14 @@
-import fs from "fs";
+import fs from 'fs';
 
-const parsedData = readData("meanings");
+const parsedData = readData('meanings');
 var myData = parsedData.data;
-const queryData = readData("queries");
+const queryData = readData('queries');
 var queries = queryData.data;
 
-export var adminDetails = readData("admin").data;
+export var adminDetails = readData('admin').data;
 
 function readData(fName) {
-  let db = fs.readFileSync(`./processed/${fName}.json`);
+  let db = fs.readFileSync(`./processed/${fName}.json`).toString();
   return JSON.parse(db);
 }
 
@@ -17,7 +17,7 @@ function pushData(path, obj) {
     `./processed/${path}.json`,
     JSON.stringify({ data: obj }),
     (err) => {
-      if (err) console.log("err occurred while writing data");
+      if (err) console.log('err occurred while writing data');
       else {
         console.log(`wrote new data to ${path}.json file successfully`);
       }
@@ -27,7 +27,7 @@ function pushData(path, obj) {
 
 function removeQuery(id) {
   queries = queries.filter((obj) => obj.id !== id);
-  pushData("queries", queries);
+  pushData('queries', queries);
 }
 
 function addWord(obj) {
@@ -36,23 +36,23 @@ function addWord(obj) {
     return;
   }
   myData[WORD] = obj;
-  pushData("meanings", myData);
+  pushData('meanings', myData);
 }
 function removeWord(obj) {
   let { WORD } = obj;
   delete myData[WORD];
-  pushData("meanings", myData);
+  pushData('meanings', myData);
 }
 function editWord(obj) {
   let { WORD } = obj;
   myData[WORD] = obj;
-  pushData("meanings", myData);
+  pushData('meanings', myData);
 }
 
 function reWriteAdminData(obj) {
   adminDetails = obj;
   console.log(adminDetails);
-  pushData("admin", obj);
+  pushData('admin', obj);
 }
 
 export {
