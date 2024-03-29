@@ -1,18 +1,19 @@
 import fs from 'fs';
+import { type BodyData } from 'hono/utils/body';
 
 const parsedData = readData('meanings');
-var myData = parsedData.data;
+const myData = parsedData.data;
 const queryData = readData('queries');
-var queries = queryData.data;
+let queries = queryData.data;
 
-export var adminDetails = readData('admin').data;
+export let adminDetails = readData('admin').data;
 
-function readData(fName) {
+function readData(fName: string) {
   let db = fs.readFileSync(`./processed/${fName}.json`).toString();
   return JSON.parse(db);
 }
 
-function pushData(path, obj) {
+function pushData(path: string, obj: any) {
   fs.writeFile(
     `./processed/${path}.json`,
     JSON.stringify({ data: obj }),
@@ -25,31 +26,32 @@ function pushData(path, obj) {
   );
 }
 
-function removeQuery(id) {
-  queries = queries.filter((obj) => obj.id !== id);
+function removeQuery(id: string | undefined) {
+  queries = queries.filter((obj: { id: any }) => obj.id !== id);
   pushData('queries', queries);
 }
 
-function addWord(obj) {
-  let { WORD } = obj;
+function addWord(obj: BodyData) {
+  let WORD: string = obj.WORD as string;
+
   if (Object.keys(myData).includes(WORD)) {
     return;
   }
   myData[WORD] = obj;
   pushData('meanings', myData);
 }
-function removeWord(obj) {
-  let { WORD } = obj;
+function removeWord(obj: BodyData) {
+  let WORD: string = obj.WORD as string;
   delete myData[WORD];
   pushData('meanings', myData);
 }
-function editWord(obj) {
-  let { WORD } = obj;
+function editWord(obj: BodyData) {
+  let WORD: string = obj.WORD as string;
   myData[WORD] = obj;
   pushData('meanings', myData);
 }
 
-function reWriteAdminData(obj) {
+function reWriteAdminData(obj: { [key: string]: any }) {
   adminDetails = obj;
   console.log(adminDetails);
   pushData('admin', obj);

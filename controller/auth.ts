@@ -159,10 +159,10 @@ export async function passwordReset(c: Context) {
   return c.json({ success: false });
 }
 
-export function changePass(req, res) {
-  let { prevPass, name, newPass } = req.body;
+export async function changePass(c: Context) {
+  let { prevPass, name, newPass } = await c.req.parseBody();
   if (prevPass !== adminDetails.password) {
-    return res.json({
+    return c.json({
       success: false,
       type: 'danger',
       message: 'You have entered wrong previous password',
@@ -171,7 +171,7 @@ export function changePass(req, res) {
   adminDetails.name = name;
   adminDetails.password = newPass;
   reWriteAdminData(adminDetails);
-  res.json({
+  c.json({
     success: true,
     type: 'success',
     message: 'successfully changed admin credentials',

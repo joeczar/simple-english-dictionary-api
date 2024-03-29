@@ -8,7 +8,7 @@ import myData, {
 } from '../data.js';
 import type { Context } from 'hono';
 import type { BodyData } from 'hono/utils/body';
-import { HandlerResponse } from 'hono/types';
+import { type HandlerResponse } from 'hono/types';
 
 export function getQueries(c: Context) {
   return c.json({ queries, dataLength: Object.keys(myData).length });
@@ -29,7 +29,7 @@ export function downloadJson(c: Context) {
     for (let key in myData) {
       let word = key;
       if (startingLetters.includes(word.charAt(0))) {
-        data.push(myData[key]);
+        data.push(myData[key as keyof WordData]);
       }
     }
     return data;

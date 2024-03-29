@@ -13,6 +13,7 @@ import { cors } from 'hono/cors';
 import { prettyJSON } from 'hono/pretty-json';
 import { serveStatic } from '@hono/node-server/serve-static';
 import type { Context } from 'hono';
+import type { Context as JsxContext } from 'hono/jsx';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,7 +29,7 @@ const words = Object.keys(myData);
 
 app.use(cors());
 app.use(prettyJSON());
-app.use('/', serveStatic({ root: '/public' }));
+app.use('*', serveStatic({ root: '/public' }));
 
 // app.use(limiter);
 
@@ -38,15 +39,9 @@ app.get('/download/all/words', (c: Context) => {
   return c.text(words.join(','));
 });
 
-// app.get('/', (c: Context) => {
-//   return c.redirect('/index.html');
-// });
-// app.get('/script.js', (c: Context) => {
-//   return c.redirect('/script.js');
-// });
-// app.get('/image.png', (c: Context) => {
-//   return c.redirect('/image.png');
-// });
+app.get('/', serveStatic({ path: '/public/index.html' }));
+app.get('/script.js', serveStatic({ path: '/public/script.js' }));
+app.get('/image.png', serveStatic({ path: '/public/image.png' }));
 
 export default {
   port: 3000,
