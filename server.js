@@ -8,6 +8,7 @@ import authRouter from "./routes/authRoute.js";
 import rateLimit from "express-rate-limit";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import {Hono} from "hono-api";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,9 +18,9 @@ const limiter = rateLimit({
   message: { status: 429, message: "Too many requests" },
 });
 
-const app = express();
-var port = process.env.PORT || 3000;
-var words = Object.keys(myData);
+const app = new hono();
+const port = process.env.PORT || 3000;
+const words = Object.keys(myData);
 
 app.use(express.json());
 //app.use(express.static(path.join(__dirname, 'public')))
