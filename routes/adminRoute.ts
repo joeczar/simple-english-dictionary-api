@@ -8,20 +8,23 @@ import { adminDetails } from '../data.js';
 import { adminToken } from '../controller/auth.js';
 import { Hono, type Context } from 'hono';
 import type { HandlerResponse } from 'hono/types';
+import { type MiddlewareHandler } from 'hono/types'; // Import the missing MiddlewareHandler type
 
-export const verifyAdmin = async (c: Context) => {
+export const verifyAdmin: MiddlewareHandler<any, never, {}> = async (
+  c: Context,
+  next: () => Promise<void>
+): Promise<void> => {
   if (adminDetails.loggedIn == false) {
     c.status(403);
-    return c.json({ message: 'login as admin to access this route' });
+    c.json({ message: 'login as admin to access this route' });
   }
   if (c.req.query('token') !== adminToken) {
     c.status(401);
-    return c.json({ message: 'Provide a valid admin token' });
+    c.json({ message: 'Provide a valid admin token' });
   }
   if (c.req.query('token') == adminToken && adminDetails.loggedIn == true) {
-    return c.json({}); // Return an empty response object
+    await next();
   }
-  return c.json({}); // Return an empty response object
 };
 
 const adminRouter = new Hono();
