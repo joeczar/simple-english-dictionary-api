@@ -1,8 +1,5 @@
-import fs from 'fs';
-import express from 'express';
-import path from 'path';
 import myData from './data.js';
-import clientRouter from './routes/clientRoute.js';
+import { clientRouter } from './routes/clientRoute.js';
 import adminRouter from './routes/adminRoute.js';
 import authRouter from './routes/authRoute.js';
 import rateLimit from 'express-rate-limit';
@@ -29,11 +26,14 @@ const words = Object.keys(myData);
 
 app.use(cors());
 app.use(prettyJSON());
-app.use('*', serveStatic({ root: '/public' }));
+app.use('/', serveStatic({ root: '/public' }));
 
 // app.use(limiter);
 
 app.route('/admin/api', adminRouter);
+app.route('/api', clientRouter);
+app.route('/', authRouter);
+
 app.get('/download/all/words', (c: Context) => {
   c.status(200);
   return c.text(words.join(','));

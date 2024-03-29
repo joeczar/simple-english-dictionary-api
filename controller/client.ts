@@ -20,6 +20,7 @@ export function uid(): string {
 
 // Hono functions with strict typings
 export const findOne = (c: Context) => {
+  console.log(c.req.query('q'));
   let meaning = findMeaning(c.req.param('word'));
   if (c.req.query('q') == 'exists') {
     if ('err' in meaning) {
