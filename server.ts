@@ -11,6 +11,9 @@ import { serveStatic } from '@hono/node-server/serve-static';
 import type { Context } from 'hono';
 import { rateLimiter } from 'hono-rate-limiter';
 import { uid } from './controller/client.js';
+import { getDb, initializeDatabase } from './db/db.js';
+import { importDataFromJson } from './db/importData.js';
+import { getWordList } from './db/database.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,6 +29,9 @@ const limiter = rateLimiter({
 const app = new Hono();
 const words = Object.keys(myData);
 
+initializeDatabase();
+await importDataFromJson();
+
 app.use(cors());
 app.use(prettyJSON());
 app.use('/', serveStatic({ root: '/public' }));
@@ -35,6 +41,8 @@ app.use(limiter);
 app.route('/admin/api', adminRouter);
 app.route('/api', clientRouter);
 app.route('/', authRouter);
+
+app.get('/download/all/words', getWordList);
 
 app.get('/download/all/words', (c: Context) => {
   c.status(200);

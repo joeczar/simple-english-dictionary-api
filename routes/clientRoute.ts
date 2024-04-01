@@ -1,5 +1,6 @@
 import { findOne, findTwo, contact } from '../controller/client.js';
 import { Hono } from 'hono';
+import { getWordByWord } from '../db/database.js';
 
 export const clientRouter = new Hono()
   .get('/', (c) => c.json({ message: 'Welcome to the dictionary' }))

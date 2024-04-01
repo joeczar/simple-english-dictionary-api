@@ -17,3 +17,24 @@ type Meaning = {
 type DictError = {
   err: string;
 };
+
+// SQLite database types
+type DatabaseSchema = {
+  words: WordData;
+  users: User;
+  submitted_definitions: SubmittedDefinition;
+};
+
+type User = {
+  id: number;
+  email: string;
+  otp: string;
+};
+
+type SubmittedDefinition = {
+  id: number;
+  word_id: number;
+  user_id: number;
+  definition: string;
+  approved: boolean;
+};

@@ -1,14 +1,14 @@
 import { type Context } from 'hono';
 import myData, { queries, pushData } from '../data.js';
+import { getWordByWord } from '../db/database.js';
+import { getDb } from '../db/db.js';
 
 // Function to find the meaning of a word with strict typings
 function findMeaning(word: string): WordData | DictError {
-  let UpperCasedWord = word.toUpperCase();
-  let meaningObj = myData[UpperCasedWord] as WordData;
+  const meaningObj = getWordByWord(word.toUpperCase());
   if (meaningObj) return meaningObj;
-
   const err: DictError & { err: string } = {
-    err: `word ${UpperCasedWord} doesn't exist in dictionary`,
+    err: `word ${word.toUpperCase()} doesn't exist in dictionary`,
   };
   return err;
 }
@@ -20,7 +20,6 @@ export function uid(): string {
 
 // Hono functions with strict typings
 export const findOne = (c: Context) => {
-  console.log(c.req.query('q'));
   let meaning = findMeaning(c.req.param('word'));
   if (c.req.query('q') == 'exists') {
     if ('err' in meaning) {

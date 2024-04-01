@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { addWord } from './db/database';
 
 async function wf(path: string, data: any) {
   try {
@@ -45,4 +46,21 @@ checkIfExist('processed/admin.json', function () {
 
 checkIfExist('processed/queries.json', function () {
   wf('./processed/queries.json', { data: [] });
+});
+
+checkIfExist('processed/meanings.json', function () {
+  const data1 = JSON.parse(
+    fs.readFileSync(`./meaningsJson/meanings1.json`).toString()
+  ).data;
+  const data2 = JSON.parse(
+    fs.readFileSync(`./meaningsJson/meanings2.json`).toString()
+  ).data;
+  const mergedData = { ...data1, ...data2 };
+
+  // Import words into the SQLite database
+  for (const word in mergedData) {
+    addWord(mergedData[word]);
+  }
+
+  wf('./processed/meanings.json', { data: mergedData });
 });

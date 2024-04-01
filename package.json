@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --watch server.ts",
-    "start": "bun run startWork.ts && bun run server.ts"
+    "start": "bun run startWork.ts && bun run server.ts",
+    "importData": "bun run db/importData.ts"
   },
   "keywords": [],
   "author": "",
