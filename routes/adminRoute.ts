@@ -7,8 +7,7 @@ import {
 import { adminDetails } from '../data.js';
 import { adminToken } from '../controller/auth.js';
 import { Hono, type Context } from 'hono';
-import type { HandlerResponse } from 'hono/types';
-import { type MiddlewareHandler } from 'hono/types'; // Import the missing MiddlewareHandler type
+import { type MiddlewareHandler } from 'hono/types';
 
 export const verifyAdmin: MiddlewareHandler<any, never, {}> = async (
   c: Context,
